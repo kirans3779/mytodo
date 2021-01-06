@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <title>Document</title>
+  </head>
+  <style>
+    .ml-50 {
+      margin-left: 250px;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-6 ml-50">
+          <div class="card">
+            <div class="card-header text-center bg-primary">
+              <span> Create Account</span>
+              <span>its Free</span>
+            </div>
+            <div class="card-body">
+              <form id="userForm">
+                <label for="">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Your First Name"
+                  id="userName"
+                />
+                <small id="nameError" class="invalid-feedback"></small>
+                <label for=""> Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Your Last Name"
+                  id="userLast"
+                />
+                <small id="lastnameError" class="invalid-feedback"></small>
+                <label for="">Email</label>
+                <input
+                  type="mail"
+                  class="form-control"
+                  placeholder="Enter Your First Name"
+                  id="usermail"
+                />
+                <small id="mailError" class="invalid-feedback"></small>
+                <label for=""> Password</label>
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Password"
+                    id="userpass1"
+                  />
+                  <small id="passError" class="invalid-feedback"></small>
+
+                  <button class="btn btn-outline-dark form-control">
+                    Generate Password
+                  </button>
+                </div>
+                <label for="">Confirm Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Enter Your Confirm Password"
+                  id="userpass2"
+                />
+                <small id="cpassError" class="invalid-feedback"></small>
+
+                <input type="checkbox" />
+                <label for="">I Agree With Tearm and Condition</label>
+                <input
+                  type="submit"
+                  placeholder="submit"
+                  class="btn btn-outline-primary form-control text-center"
+                  id="save"
+                />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      /** @format */
+
+      var form = document.querySelector("#userForm");
+      var userInput = document.querySelector("#userName");
+      var userLast = document.querySelector("#userLast");
+      var useremail = document.querySelector("#usermail");
+      var userPass = document.querySelector("#userpass1");
+      var cuserPass = document.querySelector("#userpass2");
+      var userBtn = document.querySelector("#save");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        checkRequired([userInput, userLast, useremail, userPass, cuserPass]);
+        store();
+        clear();
+      });
+      // for store data
+      function store() {
+        userInput1 = document.querySelector("#userName").value;
+
+        userLast1 = document.querySelector("#userLast").value;
+        useremail1 = document.querySelector("#usermail").value;
+        userPass1 = document.querySelector("#userpass1").value;
+        cuserPass1 = document.querySelector("#userpass2").value;
+        userArray = [];
+        userArray.push({
+          fname: userInput1,
+          lname: userLast1,
+          uemail: useremail1,
+          upass: userPass1,
+        });
+        // localStorage.setItem("user", JSON.stringify(userArray));
+
+        let alldata = JSON.parse(localStorage.getItem("user"));
+
+        if (alldata != null) {
+          var all = alldata.concat(userArray);
+          localStorage.setItem("user", JSON.stringify(all));
+        } else {
+          localStorage.setItem("user", JSON.stringify(userArray));
+        }
+      }
+
+      function checkRequired(elementArray) {
+        elementArray.forEach(function (item) {
+          if (item.value == "") {
+            showError(item);
+            document.getElementById("save").disabled = true;
+            document.getElementById("save").setAttribute("disable", "true");
+          } else {
+            showSuccess(item);
+            document.getElementById("save").setAttribute("disable", "false");
+          }
+        });
+      }
+      function showError(el) {
+        el.classList.remove("is-valid");
+        el.classList.add("is-invalid");
+        var selectorString = "#" + el.id + "+small";
+        el.querySelectorAll(selectorString)[0].innerText = el.dataset.errorMsg;
+      }
+      function showSuccess(el) {
+        el.classList.remove("is-invalid");
+        el.classList.add("is-valid");
+        var selectorString = "#" + el.id + "+small";
+        el.querySelectorAll(selectorString)[0].innerText = "";
+      }
+
+      userInput.addEventListener("focusout", function () {
+        checkRequired([userInput]);
+      });
+      userLast.addEventListener("focusout", function () {
+        checkRequired([userLast]);
+      });
+      useremail.addEventListener("focusout", function () {
+        checkRequired([useremail]);
+      });
+      userPass.addEventListener("focusout", function () {
+        checkRequired([userPass]);
+      });
+      cuserPass.addEventListener("focusout", function () {
+        checkRequired([cuserPass]);
+        passwordMatchError(
+          userPass,
+          cuserPass,
+
+          "passError",
+          "cpassError",
+          "Password Dont Match"
+        );
+      });
+
+      userInput.addEventListener("keyup", function () {
+        checkRequired([userInput]);
+      });
+      userLast.addEventListener("keyup", function () {
+        checkRequired([userLast]);
+      });
+
+      useremail.addEventListener("keyup", function () {
+        checkRequired([useremail]);
+      });
+      userPass.addEventListener("keyup", function () {
+        checkRequired([userPass]);
+      });
+      cuserPass.addEventListener("keyup", function () {
+        checkRequired([cuserPass]);
+      });
+
+      function passwordMatchError(el1, el2, el1SmallId, el2SmallId, msg) {
+        if (el1.value !== el2.value) {
+          console.log("errorr");
+          el1.classList.add("is-invalid");
+          el2.classList.add("is-invalid");
+          document.getElementById(el1SmallId).innerText = msg;
+          document.getElementById(el2SmallId).innerText = msg;
+          console.log("pass do not match");
+          return false;
+        }
+      }
+      function clear() {
+        document.getElementById("userForm").reset();
+      }
+    </script>
+
+    <script type="text/javascript" src="js/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  </body>
+</html>

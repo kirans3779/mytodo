@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+
+    <title>Document</title>
+  </head>
+  <style>
+    input {
+      display: inline-block;
+      margin-top: 20px;
+    }
+    textarea {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .icon {
+      float: right;
+    }
+    .avtar {
+      height: 50px;
+      width: 50px;
+    }
+
+    .ml-50 {
+      margin-left: 350px;
+    }
+  </style>
+  <body>
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-12">
+          <div class="col-6 ml-50">
+            <div class="card">
+              <div class="card-header text-center">
+                <h2>Add todo</h2>
+              </div>
+              <div class="card-body">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="enter tode name"
+                  id="todo"
+                />
+                <textarea
+                  name=""
+                  id="discrip"
+                  class="form-control mt-3"
+                  placeholder="enter discription"
+                ></textarea>
+                <select name="" id="priority" class="form-control mt-3">
+                  <option value="0">Choose priority</option>
+                  <option value="High">High</option>
+                  <option value="Mid">Mid</option>
+                  <option value="Low">low</option>
+                </select>
+                <button
+                  class="btn btn-outline-success form-control mt-3"
+                  data-toggle="collapse"
+                  data-target="#demo"
+                  id="save"
+                >
+                  Add Todo
+                </button>
+                <button
+                  class="btn btn-outline-warning form-control mt-3"
+                  data-toggle="collapse"
+                  data-target="#demo"
+                  id="getdemo"
+                  onclick="displayall()"
+                >
+                  getrandom todo
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body" id="display"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- update modal -->
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Add todo</h2>
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <input type="text" class="form-control" id="index" />
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Todo Name"
+              id="todo1"
+            />
+            <textarea
+              name=""
+              id="discrip1"
+              class="form-control mt-3"
+              placeholder="Enter Discription"
+            ></textarea>
+            <select name="" id="priority1" class="form-control mt-3">
+              <option value="0">Choose priority</option>
+              <option value="High">High</option>
+              <option value="Mid">Mid</option>
+              <option value="Low">low</option>
+            </select>
+            <button
+              class="btn btn-outline-success form-control mt-3"
+              data-toggle="collapse"
+              data-target="#demo"
+              id="update_val"
+            >
+              Update todo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- delete modal -->
+    <!-- Button trigger modal -->
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="mydltmodal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modelTitleId"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Delete todo</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <button
+              class="btn btn-outline-danger"
+              id="yes"
+              onclick="permission()"
+            >
+              Yes
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var usertodo = document.getElementById("todo").value;
+      var discription = document.getElementById("discrip").value;
+      var selectedPriority = document.querySelector("#priority");
+      var Priority = document.querySelector("#priority").value;
+      var btn = document.getElementById("save");
+      var alldata = localStorage.getItem("lOGIN USER");
+      var userclass = "";
+      var userbg = "";
+      let arr = [];
+      var id = 1;
+      let str = "";
+      let obj = {
+        todo: usertodo,
+        disk: discription,
+        prio: Priority,
+      };
+      arr.push({
+        todo: usertodo,
+        disk: discription,
+        prio: Priority,
+      });
+
+      btn.addEventListener("click", function () {
+        var usertodo = document.getElementById("todo").value;
+        var discription = document.getElementById("discrip").value;
+        var Priority = document.querySelector("#priority").value;
+        let obj = {
+          todo: usertodo,
+          disk: discription,
+          prio: Priority,
+        };
+        arr.push({
+          todo: usertodo,
+          disk: discription,
+          prio: Priority,
+        });
+        console.log(arr);
+
+        displayall();
+      });
+
+      function displayall() {
+        console.log("called display all");
+
+        for (i = 0; i < arr.length; i++) {
+          switch (arr[i].prio) {
+            case "High":
+              userclass = "border-success";
+              userbg = "alert-success";
+
+              break;
+            case "Mid":
+              userclass = "border-warning";
+              userbg = "alert-warning";
+              break;
+            case "Low":
+              userclass = "border-danger";
+              userbg = "alert-danger";
+              break;
+            default:
+              console.log("invalid operation");
+          }
+
+          str += `<div class="accordian" id="acc">
+              <div class="card border ${userclass}">
+                <div class="card-header alert ${userbg}" data-toggle="collapse" data-target="#collapse${id}">
+
+              ${arr[i].todo}
+                  <div class="icon">
+                    <span class="mr-5 text-warning"
+                      ><i class="fas fa-pencil-alt" onclick="show(${i})"></i
+                    ></span>
+                    <span class="mr-2 text-success"
+                      ><i
+                        class="fas fa-check-square"
+                        onclick="deletemodal(${i})"
+                      ></i
+                    ></span>
+                    <span class="mr-2 text-danger"
+                      ><i class="fas fa-trash-alt" onclick="showmodal(${i})"></i
+                    ></span>
+                  </div>
+                  </div>
+                </div>
+                <div
+                  class="card-body border ${userclass} collapse"
+                  id="collapse${id}"
+                  data-parent="#acc"
+                >
+                  ${arr[i].disk}
+                </div>
+
+        </div>
+
+      </div>`;
+          id++;
+        }
+        localStorage.setItem(alldata, JSON.stringify(arr));
+        document.getElementById("display").innerHTML = str;
+        str = "";
+      }
+
+      function show(e) {
+        $("#myModal").modal("show");
+        console.log("index on is" + i);
+        document.getElementById("index").value = e;
+        document.getElementById("todo1").value = arr[e].obj1;
+
+        document.getElementById("discrip1").value = arr[e].obj2;
+        document.getElementById("priority1").value = arr[e].obj3;
+      }
+
+      function deletemodal(no) {
+        $("#mydltmodal").modal("show");
+        document.getElementById("index").value = no;
+      }
+      function permission() {
+        var per = document.getElementById("index").value;
+        var access = parseInt(per);
+
+        console.log(arr);
+        var spliced = arr.splice(access, 1);
+        console.log(arr);
+        displayall();
+        $("#myModal").modal("hide");
+      }
+
+      var update = document.getElementById("update_val");
+
+      update.addEventListener("click", function () {
+        var index = document.getElementById("index").value;
+        var usertodo = document.getElementById("todo1").value;
+        var discription = document.getElementById("discrip1").value;
+        var Priority = document.querySelector("#priority1").value;
+        arr[index].obj1 = usertodo;
+        arr[index].obj2 = discription;
+        arr[index].obj3 = Priority;
+        console.log(arr);
+        displayall();
+        $("#myModal").modal("hide");
+      });
+
+      var random = document.getElementById("getdemo");
+      random.addEventListener("click", function () {
+        let randomtask = ["task1", "task2", "task3", "task4"];
+        let randomdesk = ["discrip1", "discrip2", "discrip3", "discrip4"];
+        let randompri = ["high", "low", "medium"];
+
+        var ran = Math.floor(Math.random() * randomtask.length);
+        var desk = Math.floor(Math.random() * randomdesk.length);
+        var prio = Math.floor(Math.random() * randompri.length);
+        var x = (document.getElementById("todo").value = randomtask[ran]);
+        var y = (document.getElementById("discrip").value = randomdesk[desk]);
+        var z = (document.getElementById("priority").value = randompri[prio]);
+      });
+
+      // user todo store
+      function data() {
+        var loginuser = JSON.parse(localStorage.getItem(alldata));
+        console.log(loginuser[0].disk);
+        for (i = 0; i < loginuser.length; i++) {
+          console.log(loginuser[i].prio);
+          switch (loginuser[i].prio) {
+            case "High":
+              userclass = "border-success";
+              userbg = "alert-success";
+              break;
+            case "Mid":
+              userclass = "border-warning";
+              userbg = "alert-warning";
+              break;
+            case "Low":
+              userclass = "border-danger";
+              userbg = "alert-danger";
+              break;
+            default:
+              console.log("invalid operation");
+          }
+
+          str += `<div class="accordian" id="acc">
+              <div class="card border ${userclass}">
+                <div class="card-header alert ${userbg}" data-toggle="collapse" data-target="#collapse${id}">
+
+              ${loginuser[i].todo}
+                  <div class="icon">
+                    <span class="mr-5 text-warning"
+                      ><i class="fas fa-pencil-alt" onclick="show(${i})"></i
+                    ></span>
+                    <span class="mr-2 text-success"
+                      ><i
+                        class="fas fa-check-square"
+                        onclick="deletemodal(${i})"
+                      ></i
+                    ></span>
+                    <span class="mr-2 text-danger"
+                      ><i class="fas fa-trash-alt" onclick="showmodal(${i})"></i
+                    ></span>
+                  </div>
+                  </div>
+                </div>
+                <div
+                  class="card-body border ${userclass} collapse"
+                  id="collapse${id}"
+                  data-parent="#acc"
+                >
+                  ${loginuser[i].disk}
+                </div>
+
+        </div>
+
+      </div>`;
+          id++;
+        }
+
+        document.getElementById("display").innerHTML = str;
+        str = "";
+      }
+      data();
+    </script>
+    <script type="text/javascript" src="js/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  </body>
+</html>

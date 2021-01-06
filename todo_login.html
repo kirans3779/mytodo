@@ -1,0 +1,88 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="display"></div>
+      <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+          <div class="card">
+            <div class="card-header bg-primary text-center text-light">
+              Signup Here
+            </div>
+            <div class="card-body">
+              <form id="userForm">
+                <div class="form-group">
+                  <label for="userName">Name</label>
+                  <input type="text" class="form-control" id="userName" />
+                  <small id="nameError" class="invalid-feedback"></small>
+                </div>
+                <div class="form-group">
+                  <label for="userPassword">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="userPassword"
+                  />
+                  <small id="passError" class="invalid-feedback"></small>
+                </div>
+
+                <button
+                  type="submit"
+                  class="btn btn-block btn-lg btn-primary"
+                  id="submitBtn"
+                >
+                  Login
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var userInput = document.querySelector("#userName");
+      var userPass = document.querySelector("#userPassword");
+      var userBtn = document.querySelector("#submitBtn");
+      let i;
+
+      userBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        userInput = document.getElementById("userName").value;
+        userPass = document.getElementById("userPassword").value;
+        alldata = JSON.parse(localStorage.getItem("user"));
+        for (i = 0; i < alldata.length; i++) {
+          console.log(alldata[i].uemail);
+          if (alldata[i].uemail == userInput && alldata[i].upass == userPass) {
+            window.location.href = "toto2.html";
+            var userentered = alldata[i].uemail;
+            localStorage.setItem("lOGIN USER", JSON.stringify(userentered));
+          } else {
+            document.getElementById(
+              "display"
+            ).innerHTML = `<div class="alert alert-danger">
+  <strong>Do Not match password or username</strong> You should <a href="#" class="alert-link">read this message</a>.
+</div>`;
+          }
+        }
+      });
+    </script>
+    <script type="text/javascript" src="js/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  </body>
+</html>
